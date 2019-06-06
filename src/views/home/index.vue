@@ -19,6 +19,7 @@
         <div class="btn btn-add" :class="{ active: new_todo }" @click="addItem">+</div>
       </form>
 
+      <!-- 待办事项大于0 -->
       <div v-if="pending.length > 0">
         <p class="status busy">你还有 {{ pending.length }} 个代办事项未完成</p>
         <transition-group name="todo-item" tag="ul" class="todo-list">
@@ -32,12 +33,14 @@
         </transition-group>
       </div>
 
+      <!-- 待办事项全部都完成了 -->
       <transition name="slide-fade">
         <p class="status free" v-if="!pending.length">
           <img src="beer_celebration.svg" alt="celebration">恭喜您已经完成了所有代办事项！
         </p>
       </transition>
 
+      <!-- 已完成的待办事项列表大于0和用户选择显示已完成 -->
       <div v-if="completed.length > 0 && showComplete">
         <p class="status">任务完成度: {{ completedPercentage }}</p>
         <transition-group name="todo-item" tag="ul" class="todo-list archived">
@@ -50,6 +53,7 @@
           ></todo-item>
         </transition-group>
       </div>
+
       <div class="control-buttons">
         <div class="btn btn-secondary" v-if="completed.length > 0" @click="toggleShowComplete">
           <span v-if="!showComplete">显示</span>
@@ -72,9 +76,9 @@ export default {
   data() {
     return {
       todoList: [
-        { id: 0, title: "Go to codepen and get inspired", done: false },
-        { id: 1, title: "Pick a project", done: false },
-        { id: 4, title: "Create a new pen", done: true }
+        { id: 0, title: "学习算法", done: false },
+        { id: 1, title: "看源码", done: false },
+        { id: 4, title: "睡觉....", done: true }
       ],
       new_todo: "",
       showComplete: false
@@ -92,22 +96,18 @@ export default {
     }
   },
   computed: {
-    pending: function() {
-      return this.todoList.filter(function(item) {
-        return !item.done;
-      });
+    pending() {
+      return this.todoList.filter(v => !v.done)
     },
-    completed: function() {
-      return this.todoList.filter(function(item) {
-        return item.done;
-      });
+    completed() {
+      return this.todoList.filter(v => v.done)
     },
-    completedPercentage: function() {
+    completedPercentage() {
       return (
         Math.floor((this.completed.length / this.todoList.length) * 100) + "%"
       );
     },
-    today: function() {
+    today() {
       var weekday = ["周日", "周一", "周二", "周三", "周四", "周五", "周六"];
       var today = new Date();
 

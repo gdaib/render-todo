@@ -1,7 +1,7 @@
 <template>
   <li>
-    <input class="todo-checkbox" :id="'item_' + id" v-model="done" type="checkbox">
-    <label :for="`item_${id}`"></label>
+    <input class="todo-checkbox" :id="domId" v-model="done" type="checkbox">
+    <label :for="domId"></label>
     <span class="todo-text">{{ title }}</span>
     <span class="delete" @click="handleDelete"></span>
   </li>
@@ -23,6 +23,9 @@ export default {
       set(val) {
         this.$emit('input', val);
       }
+    },
+    domId() {
+      return `item_${this.id}`
     }
   },
   methods: {
